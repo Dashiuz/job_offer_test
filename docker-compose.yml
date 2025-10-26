@@ -1,0 +1,33 @@
+services:
+  # ---------- Development (hot reload, Atlas) ----------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-api-dev
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT:-3000}
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: >
+      sh -c "npm ci && npm run start:dev"
+    profiles: [ "dev" ]
+
+  # ---------- Production/Stage (Atlas) ----------
+  api-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-api-prod
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-3000}
+    profiles: [ "prod" ]
