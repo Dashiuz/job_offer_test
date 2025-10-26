@@ -14,7 +14,7 @@ import { ProductsService } from './products.service';
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Get('allProducts')
   @ApiOperation({ summary: 'Get all products' })
@@ -66,5 +66,16 @@ export class ProductsController {
   })
   async inactivateProduct(@Param('sku') sku: string) {
     return this.productsService.inactivateProductsBySku(sku);
+  }
+
+  @Post('emptyProductsCollection') 
+  @ApiOperation({ summary: 'Removes all documents from the products collection' })
+  @ApiResponse({ status: 200, description: 'Products deleted successfully' })
+  @ApiNotFoundResponse({ description: 'Endpoint not found' })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server Error, something unexpected happened.',
+  })
+  async emptyProductsCollection() {
+    return this.productsService.emptyProductsCollection();
   }
 }

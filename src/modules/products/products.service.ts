@@ -10,7 +10,7 @@ import { filterInput } from '../../shared/utils/regex.util';
 export class ProductsService {
   constructor(
     @InjectModel('products') private readonly productModel: Model<Products>,
-  ) {}
+  ) { }
 
   private readonly logger = new Logger(ProductsService.name);
 
@@ -74,5 +74,11 @@ export class ProductsService {
     this.logger.debug(inactivation);
 
     return inactivation;
+  }
+
+  async emptyProductsCollection() {
+    const deleted = await this.productModel.deleteMany({}).exec();
+    this.logger.debug(deleted);
+    return deleted;
   }
 }
